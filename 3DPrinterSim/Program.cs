@@ -13,6 +13,8 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Hardware;
 using Firmware;
+using UserView;
+using System.Windows;
 
 namespace PrinterSimulator
 {
@@ -46,6 +48,7 @@ namespace PrinterSimulator
         [DllImport("user32.dll", SetLastError = true)]
         static extern bool SetForegroundWindow(IntPtr hWnd);
 
+        [STAThread]
         static void Main()
         {
 
@@ -69,6 +72,9 @@ namespace PrinterSimulator
             bool fDone = false;
             while (!fDone)
             {
+                Application app = new Application();
+                app.Run(new MainWindow());
+                
                 Console.Clear();
                 Console.WriteLine("3D Printer Simulation - Control Menu\n");
                 Console.WriteLine("P - Print");

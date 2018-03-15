@@ -1,0 +1,23 @@
+﻿<Page x:Class="UserView.TesterPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:UserView"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="TesterPage">
+
+    <Grid>
+        <Button Margin="10,10,679,383" Click="Switch_To_User">User Mode</Button>
+        <Button Margin="93,149,581,257" Content="Reset Stepper"/>
+        <Button Padding="-7,-12,1,1" FontFamily="Marlett" FontSize="70" Margin="224,208,524,203" Content="5"/>
+        <Button Margin="93,208,581,203" Content="Step Stepper"/>
+        <Button Padding="-7,-16,1,1" FontFamily="Marlett" FontSize="70" Margin="284,208,464,203" Content="6"/>
+        <Button Margin="93,265,581,146" Content="Move Galvonometer"/>
+        <TextBox Margin="340,265,428,146" Padding="0,-10,0,0" FontSize="40" Text="X"></TextBox>
+        <TextBlock Margin="224,265,524,146" Background="White" ></TextBlock>
+        <TextBox Margin="377,265,391,146" Padding="0,-10,0,0" FontSize="40" Text="Y"/>
+        <TextBlock Margin="283,265,465,146" Background="White" />
+    </Grid>
+</Page>

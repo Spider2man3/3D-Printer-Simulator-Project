@@ -32,7 +32,7 @@
   <ItemGroup>
     <Reference Include="Hardware, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3DPrinterSim\bin\Release\Hardware.dll</HintPath>
+      <HintPath>..\3DPrinterSim\libs\Hardware.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
