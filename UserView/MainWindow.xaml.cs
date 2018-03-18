@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hardware;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,11 +23,11 @@ namespace UserView
         public MainWindow()
         {
             InitializeComponent();
-            var testPage = new TesterPage();
-            var userPage = new UserPage();
+            var testPage = new TesterPage(this);
+            var userPage = new UserPage(this);
             testPage.SetUserPage(userPage);
             userPage.setTesterPage(testPage);
-            this.Content = userPage;
+            MainView.Child = userPage;
         }
     }
 }

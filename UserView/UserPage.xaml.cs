@@ -20,12 +20,14 @@ namespace UserView
     /// <summary>
     /// Interaction logic for UserPage.xaml
     /// </summary>
-    public partial class UserPage : Page
+    public partial class UserPage : Canvas
     {
+        private MainWindow mainWindow;
         private TesterPage testerPage;
-        public UserPage()
+        public UserPage(MainWindow mainWindow)
         {
             InitializeComponent();
+            this.mainWindow = mainWindow;
         }
         public void setTesterPage(TesterPage page)
         {
@@ -44,7 +46,8 @@ namespace UserView
 
         private void Switch_To_Tester(object sender, RoutedEventArgs e)
         {
-            (this.Parent as MainWindow).Content = testerPage;
+            (this.Parent as Viewbox).Child = testerPage;
+            //(this.Parent as Frame).Content = testerPage;
         }
     }
 }
