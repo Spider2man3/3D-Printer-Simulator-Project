@@ -21,6 +21,8 @@ namespace Firmware
         }
 
         // Handle incoming commands from the serial link
+        //ASK PROF DANT WHAT IS SERIAL LINK?
+
         void Process()
         {
             // Todo - receive incoming commands from the serial link and act on those commands by calling the low-level hardwarwe APIs, etc.
