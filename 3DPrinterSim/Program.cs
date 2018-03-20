@@ -62,12 +62,14 @@ namespace PrinterSimulator
             Thread oThread = new Thread(new ThreadStart(printer.Run));
             oThread.Start();
             printer.WaitForInit();
+            //------------------
 
             // Start the firmware thread - DO NOT CHANGE THESE LINES
             FirmwareController firmware = new FirmwareController(printer.GetPrinterSim());
             oThread = new Thread(new ThreadStart(firmware.Start));
             oThread.Start();
             firmware.WaitForInit();
+            //------------------
 
             //SetForegroundWindow(ptr);
             // Hide Console
