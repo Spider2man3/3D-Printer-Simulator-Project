@@ -68,13 +68,13 @@ namespace PrinterSimulator
             oThread = new Thread(new ThreadStart(firmware.Start));
             oThread.Start();
             firmware.WaitForInit();
+            HostController controller = new HostController(printer);
 
             //SetForegroundWindow(ptr);
             // Hide Console
             //ShowWindow(ptr, 0);
-
             Application app = new Application();
-            app.Run(new MainWindow());
+            app.Run(new MainWindow(controller));
 
             printer.Stop();
             firmware.Stop();

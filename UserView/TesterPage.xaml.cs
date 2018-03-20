@@ -22,9 +22,11 @@ namespace UserView
     {
         private MainWindow mainWindow;
         private UserPage userPage;
-        public TesterPage(MainWindow mainWindow)
+        private HostController controller;
+        public TesterPage(MainWindow mainWindow, HostController controller)
         {
             InitializeComponent();
+            this.controller = controller;
             this.mainWindow = mainWindow;
         }
         public void SetUserPage(UserPage page)

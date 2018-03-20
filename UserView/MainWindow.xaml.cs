@@ -20,11 +20,11 @@ namespace UserView
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(HostController controller)
         {
             InitializeComponent();
-            var testPage = new TesterPage(this);
-            var userPage = new UserPage(this);
+            var testPage = new TesterPage(this, controller);
+            var userPage = new UserPage(this, controller);
             testPage.SetUserPage(userPage);
             userPage.setTesterPage(testPage);
             MainView.Child = userPage;
