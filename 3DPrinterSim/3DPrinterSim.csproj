@@ -70,6 +70,10 @@
       <Project>{2534a41a-31b4-4d7c-bfa3-67e74b375028}</Project>
       <Name>Host</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{f9912a3a-af8a-4e80-a1b4-9c2f40f96fdb}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

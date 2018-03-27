@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using PrinterSimulator;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace UserView
+namespace Host
 {
     /// <summary>
     /// Interaction logic for UserPage.xaml
@@ -24,12 +25,13 @@ namespace UserView
     {
         private MainWindow mainWindow;
         private TesterPage testerPage;
-        private HostController controller;
-        public UserPage(MainWindow mainWindow, HostController controller)
+        private HostHandler handler;
+        public UserPage(MainWindow mainWindow, HostHandler handler)
         {
             InitializeComponent();
-            this.controller = controller;
+            this.handler = handler;
             this.mainWindow = mainWindow;
+            this.UFirmwareVersion.Content = handler.firmwareVersion;
         }
         public void setTesterPage(TesterPage page)
         {

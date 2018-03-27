@@ -1,22 +1,22 @@
-﻿<Canvas x:Class="UserView.TesterPage"
+﻿<Canvas x:Class="Host.TesterPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:UserView"
+      xmlns:local="clr-namespace:Host"
       mc:Ignorable="d"
       VerticalAlignment="Top"
       HorizontalAlignment="Left" Height="450" Width="800">
-    <Button Content="Toggle laser" Canvas.Left="520" Canvas.Top="10" Height="86" Width="144"></Button>
+    <Button Click="Toggle_Laser" Content="Toggle laser" Canvas.Left="520" Canvas.Top="10" Height="86" Width="144"></Button>
     <Button Click="Switch_To_User" Height="38" Width="96" Canvas.Left="694" Canvas.Top="10">User Mode</Button>
-    <Button Content="Reset Stepper" Height="50" Width="100" Canvas.Left="10" Canvas.Top="10"/>
+    <Button Click="Reset_Stepper" Content="Reset Stepper" Height="50" Width="100" Canvas.Left="10" Canvas.Top="10"/>
     <Grid Canvas.Left="115" Canvas.Top="60" Height="48" Width="100">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Button FontFamily="Marlett" FontSize="50" Content="5" Padding="-10" Margin="5" Grid.Column="0"/>
-        <Button FontFamily="Marlett" FontSize="50" Content="6" Padding="-10" Margin="5" Grid.Column="1"/>
+        <Button Click="Step_Stepper_Up" FontFamily="Marlett" FontSize="50" Content="5" Padding="-10" Margin="5" Grid.Column="0"/>
+        <Button Click="Step_Stepper_Down" FontFamily="Marlett" FontSize="50" Content="6" Padding="-10" Margin="5" Grid.Column="1"/>
     </Grid>
     <Button  Content="Step Stepper" Height="50" Width="100" Canvas.Left="115" Canvas.Top="10"/>
     <Button  Content="Move Galvonometer" Height="86" Width="160" Canvas.Left="220" Canvas.Top="10"/>
@@ -27,4 +27,5 @@
     <Label Content="Limit Switch Pressed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="WhiteSmoke" Canvas.Left="385" Canvas.Top="10" Height="54" Width="130" RenderTransformOrigin="0.858,-2"></Label>
     <TextBlock Padding="0" Background="WhiteSmoke" FontSize ="30" Height="48" Width="160" Canvas.Left="220" Canvas.Top="102" Text="    X       Y"/>
     <TextBlock x:Name="Console" Background="WhiteSmoke" Width="319" Canvas.Left="471" Canvas.Top="301" Height="139"></TextBlock>
+    <Label x:Name="TFirmwareVersion" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Background="WhiteSmoke" Width="141" Canvas.Left="10" Canvas.Top="403" Height="37"/>
 </Canvas>
