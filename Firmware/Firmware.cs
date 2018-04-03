@@ -11,42 +11,37 @@ namespace Firmware
 
     public class FirmwareController
     {
+        String firmwareVersion = "1.0";
         PrinterControl printer;
-        bool fDone = false;
+        FirmwareHandler handler;
         bool fInitialized = false;
 
         public FirmwareController(PrinterControl printer)
         {
             this.printer = printer;
-        }
-
-        // Handle incoming commands from the serial link
-        //ASK PROF DANT WHAT IS SERIAL LINK?
-
-        void Process()
-        {
-            // Todo - receive incoming commands from the serial link and act on those commands by calling the low-level hardwarwe APIs, etc.
-            while (!fDone)
-            {
-            }
+            handler = new FirmwareHandler(printer, firmwareVersion);
         }
 
         public void Start()
         {
             fInitialized = true;
 
-            Process(); // this is a blocking call
+            handler.Process(); // this is a blocking call
         }
 
         public void Stop()
         {
-            fDone = true;
+            handler.fDone = true;
         }
 
         public void WaitForInit()
         {
             while (!fInitialized)
                 Thread.Sleep(100);
+        }
+        public int getCommandExecutedCount(String command)
+        {
+            return handler.getExecutions(command);
         }
     }
 }

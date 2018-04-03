@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Helpers\HelperFunctions.cs" />
     <Compile Include="Firmware.cs" />
+    <Compile Include="FirmwareHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

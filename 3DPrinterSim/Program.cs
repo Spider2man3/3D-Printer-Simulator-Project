@@ -13,6 +13,8 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Hardware;
 using Firmware;
+using Host;
+using System.Windows;
 
 namespace PrinterSimulator
 {
@@ -36,22 +38,25 @@ namespace PrinterSimulator
             Console.ReadKey();
         }
 
+       //[STAThread]
+       //
+       //[DllImport("kernel32.dll", SetLastError = true)]
+       //static extern IntPtr GetConsoleWindow();
+       //
+       //[DllImport("user32.dll", SetLastError = true)]
+       //internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+       //
+       //[DllImport("user32.dll", SetLastError = true)]
+       //static extern bool SetForegroundWindow(IntPtr hWnd);
+       //[DllImport("user32.dll", SetLastError = true)]
+       //static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
         [STAThread]
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern IntPtr GetConsoleWindow();
-
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool SetForegroundWindow(IntPtr hWnd);
-
         static void Main()
         {
 
-            IntPtr ptr = GetConsoleWindow();
-            MoveWindow(ptr, 0, 0, 1000, 400, true);
+            //IntPtr ptr = GetConsoleWindow();
+            //MoveWindow(ptr, 0, 0, 1000, 400, true);
 
             // Start the printer - DO NOT CHANGE THESE LINES
             PrinterThread printer = new PrinterThread();
@@ -65,37 +70,44 @@ namespace PrinterSimulator
             oThread = new Thread(new ThreadStart(firmware.Start));
             oThread.Start();
             firmware.WaitForInit();
-            //------------------
+            HostHandler handler = new HostHandler(printer);
 
-            SetForegroundWindow(ptr);
+            //SetForegroundWindow(ptr);
+            // Hide Console
+            //ShowWindow(ptr, 0);
+            Application app = new Application();
+            app.Run(new MainWindow(handler));
 
-            bool fDone = false;
-            while (!fDone)
-            {
-                Console.Clear();
-                Console.WriteLine("3D Printer Simulation - Control Menu\n");
-                Console.WriteLine("P - Print");
-                Console.WriteLine("T - Test");
-                Console.WriteLine("Q - Quit");
-
-                char ch = Char.ToUpper(Console.ReadKey().KeyChar);
-                switch (ch)
-                {
-                    case 'P': // Print
-                        PrintFile(printer.GetPrinterSim());
-                        break;
-
-                    case 'T': // Test menu
-                        break;
-
-                    case 'Q' :  // Quite
-                        printer.Stop();
-                        firmware.Stop();
-                        fDone = true;
-                        break;
-                }
-
-            }
+            printer.Stop();
+            firmware.Stop();
+            //bool fDone = false;
+            //while (!fDone)
+            //{
+            //    
+            //    Console.Clear();
+            //    Console.WriteLine("3D Printer Simulation - Control Menu\n");
+            //    Console.WriteLine("P - Print");
+            //    Console.WriteLine("T - Test");
+            //    Console.WriteLine("Q - Quit");
+            //
+            //    char ch = Char.ToUpper(Console.ReadKey().KeyChar);
+            //    switch (ch)
+            //    {
+            //        case 'P': // Print
+            //            PrintFile(printer.GetPrinterSim());
+            //            break;
+            //
+            //        case 'T': // Test menu
+            //            break;
+            //
+            //        case 'Q' :  // Quite
+            //            printer.Stop();
+            //            firmware.Stop();
+            //            fDone = true;
+            //            break;
+            //    }
+            //
+            //}
 
         }
     }

@@ -41,6 +41,7 @@
     <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +50,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -63,6 +65,10 @@
     <ProjectReference Include="..\Firmware\Firmware.csproj">
       <Project>{95380e0b-df03-42bb-8967-a8c8ed0f1bb6}</Project>
       <Name>Firmware</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserView\Host.csproj">
+      <Project>{2534a41a-31b4-4d7c-bfa3-67e74b375028}</Project>
+      <Name>Host</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
       <Project>{f9912a3a-af8a-4e80-a1b4-9c2f40f96fdb}</Project>
