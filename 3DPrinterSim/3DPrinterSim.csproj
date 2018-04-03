@@ -64,6 +64,10 @@
       <Project>{95380e0b-df03-42bb-8967-a8c8ed0f1bb6}</Project>
       <Name>Firmware</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{f9912a3a-af8a-4e80-a1b4-9c2f40f96fdb}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
