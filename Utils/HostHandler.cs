@@ -15,7 +15,9 @@ namespace PrinterSimulator
         ResetStepper,
         StepStepper,
         SetLaser,
-        MoveGalvonometer
+        MoveGalvonometer,
+        WaitMicroseconds,
+        RemoveModelFromPrinter
     }
     public class HostHandler
     {
@@ -46,14 +48,23 @@ namespace PrinterSimulator
                     // send command with param[0] (up or down)
                     break;
                 case Command.SetLaser:
-                    byteMessage = new byte[4] { 0x03, 0x00, 0x00, 0x00 };
+                    byteMessage = new byte[4] { 0x03, 0x04, 0x00, 0x00 };
+                    printer.WriteSerialToFirmware(byteMessage, 4);
+                    handleResponse(cmd, byteMessage, param);
                     // send command param[0] (on or off)
                     break;
                 case Command.MoveGalvonometer:
-                    byteMessage = new byte[4] { 0x04, 0x00, 0x00, 0x00 };
+                    byteMessage = new byte[4] { 0x04, 0x08, 0x00, 0x00 };
+                    printer.WriteSerialToFirmware(byteMessage, 4);
+                    handleResponse(cmd, byteMessage, param);
                     // send commandwith param[0] x and param[1] y
                     break;
+                case Command.RemoveModelFromPrinter:
+                    break;
+                case Command.WaitMicroseconds:
+                    break;
                 default:
+                    Console.WriteLine("Not a valid command");
                     break;
             }
         }

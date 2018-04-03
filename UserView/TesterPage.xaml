@@ -19,10 +19,10 @@
         <Button Click="Step_Stepper_Down" FontFamily="Marlett" FontSize="50" Content="6" Padding="-10" Margin="5" Grid.Column="1"/>
     </Grid>
     <Button  Content="Step Stepper" Height="50" Width="100" Canvas.Left="115" Canvas.Top="10"/>
-    <Button  Content="Move Galvonometer" Height="86" Width="160" Canvas.Left="220" Canvas.Top="10"/>
+    <Button  Click ="Move_Galvonometer" Content="Move Galvonometer" Height="86" Width="160" Canvas.Left="220" Canvas.Top="10"/>
     <StackPanel Orientation="Horizontal" Height="48" Canvas.Top="154" Canvas.Left="220" Width="160">
-        <TextBox Height="46"  Width="78" Margin="1" FontSize="30"/>
-        <TextBox Height="46"  Width="78" Margin="1" FontSize="30"/>
+        <TextBox x:Name="XGalvo" Height="46"  Width="78" Margin="1" FontSize="30"/>
+        <TextBox x:Name="YGalvo" Height="46"  Width="78" Margin="1" FontSize="30"/>
     </StackPanel>
     <Label Content="Limit Switch Pressed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="WhiteSmoke" Canvas.Left="385" Canvas.Top="10" Height="54" Width="130" RenderTransformOrigin="0.858,-2"></Label>
     <TextBlock Padding="0" Background="WhiteSmoke" FontSize ="30" Height="48" Width="160" Canvas.Left="220" Canvas.Top="102" Text="    X       Y"/>

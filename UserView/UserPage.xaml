@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Host"
         mc:Ignorable="d" Height="450" Width="800"
         VerticalAlignment="Center" HorizontalAlignment="Center">
-    <Button VerticalAlignment="Top" HorizontalAlignment="Left" Click="Button_Click" Height="42" Width="137" Canvas.Left="10" Canvas.Top="10">Browse</Button>
-    <Button VerticalAlignment="Top" HorizontalAlignment="Left" RenderTransformOrigin="1.639,-1.951" Height="41" Width="138" Canvas.Left="9" Canvas.Top="60">Run</Button>
+    <Button Click="Browse_Files" VerticalAlignment="Top" HorizontalAlignment="Left" Height="42" Width="137" Canvas.Left="10" Canvas.Top="10">Browse</Button>
+    <Button Click="Run"  VerticalAlignment="Top" HorizontalAlignment="Left" RenderTransformOrigin="1.639,-1.951" Height="41" Width="138" Canvas.Left="9" Canvas.Top="60">Run</Button>
     <Button VerticalAlignment="Top" HorizontalAlignment="Left" Click="Switch_To_Tester" Height="42" Width="118" Canvas.Left="672" Canvas.Top="10">Test Mode</Button>
     <TextBlock x:Name="Console" Background="WhiteSmoke" Width="615" Canvas.Left="175" Canvas.Top="132" Height="308"></TextBlock>
     <Label x:Name="UFirmwareVersion" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Background="WhiteSmoke" Width="126" Canvas.Left="10" Canvas.Top="407" Height="33"/>

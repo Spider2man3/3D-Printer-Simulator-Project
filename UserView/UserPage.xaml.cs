@@ -26,6 +26,7 @@ namespace Host
         private MainWindow mainWindow;
         private TesterPage testerPage;
         private HostHandler handler;
+        private Stream file;
         public UserPage(MainWindow mainWindow, HostHandler handler)
         {
             InitializeComponent();
@@ -37,14 +38,14 @@ namespace Host
         {
             this.testerPage = page;
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Browse_Files(object sender, RoutedEventArgs e)
         {
             OpenFileDialog filedialog = new OpenFileDialog();
             filedialog.Title = "Select GCode file";
             filedialog.Multiselect = false;
             if (filedialog.ShowDialog() == true)
             {
-                Stream fileStream = filedialog.OpenFile();
+                this.file = filedialog.OpenFile();
             }
         }
 
@@ -52,6 +53,14 @@ namespace Host
         {
             (this.Parent as Viewbox).Child = testerPage;
             //(this.Parent as Frame).Content = testerPage;
+        }
+
+        private void Run(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                handler.execute(Command.ResetStepper, new float[0]);
+            }
         }
     }
 }
