@@ -68,6 +68,7 @@ namespace PrinterSimulator
                     break;
             }
         }
+
         private void handleResponse(Command cmd, byte[] byteMessage, float[] param)
         {
             var finalResponse = "";
@@ -102,7 +103,7 @@ namespace PrinterSimulator
             }
 
         }
-        public bool read(byte[] buffer, int expectedBytes)
+        private bool read(byte[] buffer, int expectedBytes)
         {
             int readResult = 0;
             while (readResult == 0)

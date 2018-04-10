@@ -104,6 +104,8 @@ namespace Firmware
                 case 0x01:
                     commandsExecuted["ResetStepper"] += 1;
                     printer.ResetStepper();
+                    moveStepperToTop();
+                    moveStepperFromTopToBuildPlate();
                     break;
                 case 0x02:
                     float direction = BitConverter.ToSingle(param, 0);
@@ -128,6 +130,58 @@ namespace Firmware
                     Console.WriteLine("Bad command");
                     break;
             }
+        }
+
+        public void moveStepperToTop()
+        {
+            double stepsPerMicro = .0016;
+            long microPerStep = 625;
+            while (printer.LimitSwitchPressed() == false)
+            {
+                bool printerStepped = printer.StepStepper(PrinterControl.StepperDir.STEP_UP);
+                if (!printerStepped && !printer.LimitSwitchPressed())
+                {
+                    throw new Exception("printer step failed, speed is wrong?");
+                }
+                printer.WaitMicroseconds(microPerStep);
+                microPerStep = (long)(1 / stepsPerMicro);
+                if (microPerStep > 64)
+                {
+                    stepsPerMicro += .0016;
+                }
+                else
+                {
+                    microPerStep = 64;
+                }
+            }
+            Console.WriteLine("Limit switch pressed?");
+        }
+
+        public void moveStepperFromTopToBuildPlate()
+        {
+            double stepsPerMicro = .0016;
+            long microPerStep = 625;
+            int height = 40000;
+            while (height > 0)
+            {
+                bool printerStepped = printer.StepStepper(PrinterControl.StepperDir.STEP_DOWN);
+                height -= 1;
+                if (!printerStepped && height > 0)
+                {
+                    throw new Exception("printer step failed, speed is wrong?");
+                }
+                printer.WaitMicroseconds(microPerStep);
+                microPerStep = (long)(1 / stepsPerMicro);
+                if (microPerStep > 63)
+                {
+                    stepsPerMicro += .0016;
+                }
+                else
+                {
+                    microPerStep = 63;
+                }
+            }
+            Console.WriteLine("Limit switch pressed?");
         }
     }
 }
