@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using gs;
+using Microsoft.Win32;
 using PrinterSimulator;
 using System;
 using System.Collections.Generic;
@@ -43,9 +44,12 @@ namespace Host
             OpenFileDialog filedialog = new OpenFileDialog();
             filedialog.Title = "Select GCode file";
             filedialog.Multiselect = false;
+           // var gcodeParser = new GcodeParser();
             if (filedialog.ShowDialog() == true)
             {
                 this.file = filedialog.OpenFile();
+                //TextReader tr = new StreamReader(this.file);
+                //gcodeParser.Parse(tr);
             }
         }
 
@@ -57,10 +61,13 @@ namespace Host
 
         private void Run(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 100; i++)
-            {
-                handler.execute(Command.ResetStepper, new float[0]);
-            }
+            var gcodeParser = new GcodeParser();
+
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    handler.execute(Command.ResetStepper, new float[0]);
+            //}
+            gcodeParser.ParseGcode(this.file, handler);
         }
     }
 }

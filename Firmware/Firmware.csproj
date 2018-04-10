@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\HelperFunctions.cs" />
     <Compile Include="Firmware.cs" />
     <Compile Include="FirmwareHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -50,6 +50,11 @@ namespace PrinterSimulator
                 case Command.SetLaser:
                     byteMessage = new byte[4] { 0x03, 0x04, 0x00, 0x00 };
                     printer.WriteSerialToFirmware(byteMessage, 4);
+                    Console.WriteLine("set laser param was");
+                    foreach (var par in param)
+                    {
+                        Console.WriteLine(par);
+                    }
                     handleResponse(cmd, byteMessage, param);
                     // send command param[0] (on or off)
                     break;
@@ -104,9 +109,11 @@ namespace PrinterSimulator
         }
         public bool read(byte[] buffer, int expectedBytes)
         {
+            int timeoutCount = 0;
             int readResult = 0;
-            while (readResult == 0)
+            while (readResult == 0 && timeoutCount < 100)
             {
+                timeoutCount += 1;
                 readResult = printer.ReadSerialFromFirmware(buffer, expectedBytes);
                 if (readResult == 0)
                 {

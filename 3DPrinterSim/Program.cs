@@ -23,7 +23,6 @@ namespace PrinterSimulator
         static void PrintFile(PrinterControl simCtl)
         {
             System.IO.StreamReader file = new System.IO.StreamReader("..\\..\\..\\SampleSTLs\\F-35_Corrected.gcode");
-            var parsedGcode = GcodeParser.ParseGcode(file);
             
             Stopwatch swTimer = new Stopwatch();
             swTimer.Start();

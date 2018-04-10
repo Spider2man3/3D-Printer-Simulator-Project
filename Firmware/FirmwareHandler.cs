@@ -109,13 +109,32 @@ namespace Firmware
                     float direction = BitConverter.ToSingle(param, 0);
                     if (direction == 1)
                     {
+                        Console.WriteLine("Step up");
                         commandsExecuted["StepStepperUp"] += 1;
                         bool result = printer.StepStepper(PrinterControl.StepperDir.STEP_UP);
                     }
                     else if (direction == 0)
                     {
+                        Console.WriteLine("Step down");
                         commandsExecuted["StepStepperDown"] += 1;
                         bool result = printer.StepStepper(PrinterControl.StepperDir.STEP_DOWN);
+                    }
+                    break;
+                case 0x03:
+                    float value = BitConverter.ToSingle(param, 0);
+                    if (value == 1)
+                    {
+                        printer.SetLaser(true);
+                        Console.WriteLine("Turned on laser");
+                    }
+                    else if (value == 0)
+                    {
+                        printer.SetLaser(false);
+                        Console.WriteLine("Turned laser off");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid laser value for on/off");
                     }
                     break;
                 case 0x04:
@@ -123,6 +142,7 @@ namespace Firmware
                     float x = BitConverter.ToSingle(param, 0);
                     float y = BitConverter.ToSingle(param, 4);
                     printer.MoveGalvos(x, y);
+                    Console.WriteLine("Moved galvo");
                     break;
                 default:
                     Console.WriteLine("Bad command");
