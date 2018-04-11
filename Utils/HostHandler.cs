@@ -33,28 +33,33 @@ namespace PrinterSimulator
             {
                 case Command.GetFirmwareVersion:
                     var byteMessage = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
+                    byteMessage = HelperFunctions.ParseCmdPacket(byteMessage);
                     printer.WriteSerialToFirmware(byteMessage, 4);
                     handleResponse(cmd, byteMessage, param);
                     break;
                 case Command.ResetStepper:
                     byteMessage = new byte[4] { 0x01, 0x00, 0x00, 0x00 };
+                    byteMessage = HelperFunctions.ParseCmdPacket(byteMessage);
                     printer.WriteSerialToFirmware(byteMessage, 4);// send command
                     handleResponse(cmd, byteMessage, param);
                     break;
                 case Command.StepStepper:
                     byteMessage = new byte[4] { 0x02, 0x04, 0x00, 0x00 };
+                    byteMessage = HelperFunctions.ParseCmdPacket(byteMessage);
                     printer.WriteSerialToFirmware(byteMessage, 4);
                     handleResponse(cmd, byteMessage, param);
                     // send command with param[0] (up or down)
                     break;
                 case Command.SetLaser:
                     byteMessage = new byte[4] { 0x03, 0x04, 0x00, 0x00 };
+                    byteMessage = HelperFunctions.ParseCmdPacket(byteMessage);
                     printer.WriteSerialToFirmware(byteMessage, 4);
                     handleResponse(cmd, byteMessage, param);
                     // send command param[0] (on or off)
                     break;
                 case Command.MoveGalvonometer:
                     byteMessage = new byte[4] { 0x04, 0x08, 0x00, 0x00 };
+                    byteMessage = HelperFunctions.ParseCmdPacket(byteMessage);
                     printer.WriteSerialToFirmware(byteMessage, 4);
                     handleResponse(cmd, byteMessage, param);
                     // send commandwith param[0] x and param[1] y
