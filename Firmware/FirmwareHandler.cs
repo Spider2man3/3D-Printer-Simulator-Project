@@ -1,4 +1,5 @@
 ﻿using Hardware;
+using PrinterSimulator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,7 +76,7 @@ namespace Firmware
                     var paramBytes = new byte[paramSize];
                     if (read(paramBytes, paramSize))
                     {
-                        //checksum = validateChecksum(header, paramBytes);
+                        checksum = HelperFunctions.validateChecksum(header, paramBytes);
                         if (checksum == true)
                         {
                             // Run command header[0]

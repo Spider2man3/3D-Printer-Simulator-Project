@@ -29,39 +29,55 @@ namespace PrinterSimulator
         }
         public void execute(Command cmd, float[] param)
         {
+            var paramBytes = getParamAsBytes(param);
             switch (cmd)
             {
                 case Command.GetFirmwareVersion:
                     var byteMessage = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
-                    byteMessage = HelperFunctions.ParseCmdPacket(byteMessage);
+                    var fullMessage = getFullMessage(byteMessage, paramBytes);
+                    var checksum = HelperFunctions.ParseCmdPacket(fullMessage);
+                    byteMessage[2] = checksum[0];
+                    byteMessage[3] = checksum[1];
                     printer.WriteSerialToFirmware(byteMessage, 4);
-                    handleResponse(cmd, byteMessage, param);
+                    handleResponse(cmd, byteMessage, paramBytes, param);
                     break;
                 case Command.ResetStepper:
                     byteMessage = new byte[4] { 0x01, 0x00, 0x00, 0x00 };
-                    byteMessage = HelperFunctions.ParseCmdPacket(byteMessage);
-                    printer.WriteSerialToFirmware(byteMessage, 4);// send command
-                    handleResponse(cmd, byteMessage, param);
+                    fullMessage = getFullMessage(byteMessage, paramBytes);
+                    checksum = HelperFunctions.ParseCmdPacket(fullMessage);
+                    byteMessage[2] = checksum[0];
+                    byteMessage[3] = checksum[1];
+                    printer.WriteSerialToFirmware(byteMessage, 4);
+                    handleResponse(cmd, byteMessage, paramBytes, param);
                     break;
                 case Command.StepStepper:
                     byteMessage = new byte[4] { 0x02, 0x04, 0x00, 0x00 };
-                    byteMessage = HelperFunctions.ParseCmdPacket(byteMessage);
+                    fullMessage = getFullMessage(byteMessage, paramBytes);
+                    checksum = HelperFunctions.ParseCmdPacket(fullMessage);
+                    byteMessage[2] = checksum[0];
+                    byteMessage[3] = checksum[1];
                     printer.WriteSerialToFirmware(byteMessage, 4);
-                    handleResponse(cmd, byteMessage, param);
+                    handleResponse(cmd, byteMessage, paramBytes, param);
                     // send command with param[0] (up or down)
                     break;
                 case Command.SetLaser:
                     byteMessage = new byte[4] { 0x03, 0x04, 0x00, 0x00 };
-                    byteMessage = HelperFunctions.ParseCmdPacket(byteMessage);
+                    fullMessage = getFullMessage(byteMessage, paramBytes);
+                    checksum = HelperFunctions.ParseCmdPacket(fullMessage);
+                    byteMessage[2] = checksum[0];
+                    byteMessage[3] = checksum[1];
                     printer.WriteSerialToFirmware(byteMessage, 4);
-                    handleResponse(cmd, byteMessage, param);
+                    handleResponse(cmd, byteMessage, paramBytes, param);
                     // send command param[0] (on or off)
                     break;
                 case Command.MoveGalvonometer:
                     byteMessage = new byte[4] { 0x04, 0x08, 0x00, 0x00 };
-                    byteMessage = HelperFunctions.ParseCmdPacket(byteMessage);
+                    fullMessage = getFullMessage(byteMessage, paramBytes);
+                    checksum = HelperFunctions.ParseCmdPacket(fullMessage);
+                    byteMessage[2] = checksum[0];
+                    byteMessage[3] = checksum[1];
                     printer.WriteSerialToFirmware(byteMessage, 4);
-                    handleResponse(cmd, byteMessage, param);
+                    handleResponse(cmd, byteMessage, paramBytes, param);
                     // send commandwith param[0] x and param[1] y
                     break;
                 case Command.RemoveModelFromPrinter:
@@ -74,7 +90,27 @@ namespace PrinterSimulator
             }
         }
 
-        private void handleResponse(Command cmd, byte[] byteMessage, float[] param)
+        private byte[] getFullMessage(byte[] header, byte[] param)
+        {
+            var fullMessage = new byte[header.Length + param.Length];
+            for (int i = 0; i < header.Length; i++)
+            {
+                fullMessage[i] = header[i];
+            }
+            for (int i = 0; i < param.Length; i++)
+            {
+                fullMessage[i + header.Length] = param[i];
+            }
+            return fullMessage;
+        }
+        private byte[] getParamAsBytes(float[] param)
+        {
+            byte[] paramReturn = new byte[param.Length * 4];
+            Buffer.BlockCopy(param, 0, paramReturn, 0, paramReturn.Length);
+            return paramReturn;
+        }
+
+        private void handleResponse(Command cmd, byte[] byteMessage, byte[] byteParam, float[] floatParam)
         {
             var finalResponse = "";
             var headerResponse = new byte[4];
@@ -83,9 +119,7 @@ namespace PrinterSimulator
             if (byteMessage.SequenceEqual(headerResponse))
             {
                 printer.WriteSerialToFirmware(new byte[1] { 0xA5 }, 1);
-                byte[] finalMessage = new byte[param.Length * 4];
-                Buffer.BlockCopy(param, 0, finalMessage, 0, finalMessage.Length);
-                printer.WriteSerialToFirmware(finalMessage, finalMessage.Length);
+                printer.WriteSerialToFirmware(byteParam, byteParam.Length);
                 var ch = new byte[1] { 0xFF};
                 while (!ch.SequenceEqual(new byte[1] { 0x00 }))
                 {
@@ -98,13 +132,13 @@ namespace PrinterSimulator
                 }
                 else
                 {
-                    execute(cmd, param);
+                    execute(cmd, floatParam);
                 }
             }
             else
             {
                 printer.WriteSerialToFirmware(new byte[1] { 0xFF }, 1);
-                execute(cmd, param);
+                execute(cmd, floatParam);
             }
 
         }
