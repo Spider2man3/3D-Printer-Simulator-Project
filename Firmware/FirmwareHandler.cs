@@ -135,8 +135,8 @@ namespace Firmware
 
         public void moveStepperToTop()
         {
-            double stepsPerMicro = .0016;
-            long microPerStep = 625;
+            double currentMicrosecondWait = 630;
+            double currentWait = 0;
             while (printer.LimitSwitchPressed() == false)
             {
                 bool printerStepped = printer.StepStepper(PrinterControl.StepperDir.STEP_UP);
@@ -144,24 +144,22 @@ namespace Firmware
                 {
                     throw new Exception("printer step failed, speed is wrong?");
                 }
-                printer.WaitMicroseconds(microPerStep);
-                microPerStep = (long)(1 / stepsPerMicro);
-                if (microPerStep > 64)
+                printer.WaitMicroseconds((long)currentMicrosecondWait);
+                currentWait += currentMicrosecondWait;
+                if (currentWait >= 1000 && currentMicrosecondWait > 69)
                 {
-                    stepsPerMicro += .0016;
+                    currentMicrosecondWait -= .062;
+                    currentWait = 0;
                 }
-                else
-                {
-                    microPerStep = 64;
-                }
+               
             }
             Console.WriteLine("Limit switch pressed?");
         }
 
         public void moveStepperFromTopToBuildPlate()
         {
-            double stepsPerMicro = .0016;
-            long microPerStep = 625;
+            double currentMicrosecondWait = 630;
+            double currentWait = 0;
             int height = 40000;
             while (height > 0)
             {
@@ -171,15 +169,12 @@ namespace Firmware
                 {
                     throw new Exception("printer step failed, speed is wrong?");
                 }
-                printer.WaitMicroseconds(microPerStep);
-                microPerStep = (long)(1 / stepsPerMicro);
-                if (microPerStep > 63)
+                printer.WaitMicroseconds((long)currentMicrosecondWait);
+                currentWait += currentMicrosecondWait;
+                if (currentWait >= 1000 && currentMicrosecondWait > 69)
                 {
-                    stepsPerMicro += .0016;
-                }
-                else
-                {
-                    microPerStep = 63;
+                    currentMicrosecondWait -= .062;
+                    currentWait = 0;
                 }
             }
             Console.WriteLine("Limit switch pressed?");
