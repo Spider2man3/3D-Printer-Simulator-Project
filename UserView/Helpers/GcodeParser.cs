@@ -22,7 +22,7 @@ namespace Host
             {
                 while (!sr.EndOfStream)
                 {
-                    List<string> GLine = new List<string>();
+                    //List<string> GLine = new List<string>();
                     lineCounter++;
                     var line = sr.ReadLine();
                     if (String.IsNullOrEmpty(line)) continue;

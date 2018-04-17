@@ -16,7 +16,7 @@ namespace PrinterSimulator
                 byteSum += cmdPacket[i];
             }
             //ushort checkSum = (ushort)((12 * byteSum) / 16);
-            byte[] checksumBytes = new byte[2]; 
+            byte[] checksumBytes = new byte[] { 0, 0 }; 
             checksumBytes[0] = (byte)(byteSum >> 8);
             checksumBytes[1] = (byte)(byteSum & 0xff);
 
@@ -24,8 +24,9 @@ namespace PrinterSimulator
         }
         public static bool validateChecksum(byte[] header, byte[] parameters)
         {
-            var checksum = header[2] + header[3];
-            var sum = 0;
+            var checksum = new byte[2] { header[2], header[3] };
+            ushort checksumValue = (ushort)((ushort)(header[2] << 8) + header[3]);
+            ushort sum = 0;
             for (int i = 0; i < 2; i++)
             {
                 sum += header[i];
@@ -34,7 +35,7 @@ namespace PrinterSimulator
             {
                 sum += parameters[i];
             }
-            if (checksum == sum)
+            if (sum == checksumValue)
             {
                 return true;
             }

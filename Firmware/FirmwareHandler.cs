@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Firmware
 {
-    class FirmwareHandler
+    public class FirmwareHandler
     {
         PrinterControl printer;
         public bool fDone = false;
@@ -34,15 +34,15 @@ namespace Firmware
             {
                 return true;
             }
-            int timeout = 10;
+            int timeout = 10000;
             int readResult = 0;
             while (timeout > 0 && readResult == 0)
             {
                 readResult = printer.ReadSerialFromHost(buffer, expectedBytes);
-                if (readResult == 0)
+                if (readResult != expectedBytes)
                 {
                     timeout--;
-                    Thread.Sleep(5);
+                    Thread.Sleep(10);
                 }
             }
             if (timeout == 0)
@@ -61,6 +61,7 @@ namespace Firmware
                 var header = new byte[4];
                 if (printer.ReadSerialFromHost(header, 4) == 0)
                 {
+                    Thread.Sleep(5);
                     continue; // skip rest of loop 
                 }
                 printer.WriteSerialToHost(header, 4);
@@ -166,9 +167,9 @@ namespace Firmware
                 }
                 printer.WaitMicroseconds((long)currentMicrosecondWait);
                 currentWait += currentMicrosecondWait;
-                if (currentWait >= 1000 && currentMicrosecondWait > 69)
+                if (currentWait > 1000 && currentMicrosecondWait > 69)
                 {
-                    currentMicrosecondWait -= .062;
+                    currentMicrosecondWait -= .06;
                     currentWait = 0;
                 }
                
@@ -191,9 +192,9 @@ namespace Firmware
                 }
                 printer.WaitMicroseconds((long)currentMicrosecondWait);
                 currentWait += currentMicrosecondWait;
-                if (currentWait >= 1000 && currentMicrosecondWait > 69)
+                if (currentWait > 1000 && currentMicrosecondWait > 69)
                 {
-                    currentMicrosecondWait -= .062;
+                    currentMicrosecondWait -= .055;
                     currentWait = 0;
                 }
             }

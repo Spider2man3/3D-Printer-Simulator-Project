@@ -30,54 +30,25 @@ namespace PrinterSimulator
         public void execute(Command cmd, float[] param)
         {
             var paramBytes = getParamAsBytes(param);
+            var byteMessage = new byte[4];
             switch (cmd)
             {
                 case Command.GetFirmwareVersion:
-                    var byteMessage = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
-                    var fullMessage = getFullMessage(byteMessage, paramBytes);
-                    var checksum = HelperFunctions.ParseCmdPacket(fullMessage);
-                    byteMessage[2] = checksum[0];
-                    byteMessage[3] = checksum[1];
-                    printer.WriteSerialToFirmware(byteMessage, 4);
-                    handleResponse(cmd, byteMessage, paramBytes, param);
+                    byteMessage = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
                     break;
                 case Command.ResetStepper:
                     byteMessage = new byte[4] { 0x01, 0x00, 0x00, 0x00 };
-                    fullMessage = getFullMessage(byteMessage, paramBytes);
-                    checksum = HelperFunctions.ParseCmdPacket(fullMessage);
-                    byteMessage[2] = checksum[0];
-                    byteMessage[3] = checksum[1];
-                    printer.WriteSerialToFirmware(byteMessage, 4);
-                    handleResponse(cmd, byteMessage, paramBytes, param);
                     break;
                 case Command.StepStepper:
                     byteMessage = new byte[4] { 0x02, 0x04, 0x00, 0x00 };
-                    fullMessage = getFullMessage(byteMessage, paramBytes);
-                    checksum = HelperFunctions.ParseCmdPacket(fullMessage);
-                    byteMessage[2] = checksum[0];
-                    byteMessage[3] = checksum[1];
-                    printer.WriteSerialToFirmware(byteMessage, 4);
-                    handleResponse(cmd, byteMessage, paramBytes, param);
                     // send command with param[0] (up or down)
                     break;
                 case Command.SetLaser:
                     byteMessage = new byte[4] { 0x03, 0x04, 0x00, 0x00 };
-                    fullMessage = getFullMessage(byteMessage, paramBytes);
-                    checksum = HelperFunctions.ParseCmdPacket(fullMessage);
-                    byteMessage[2] = checksum[0];
-                    byteMessage[3] = checksum[1];
-                    printer.WriteSerialToFirmware(byteMessage, 4);
-                    handleResponse(cmd, byteMessage, paramBytes, param);
                     // send command param[0] (on or off)
                     break;
                 case Command.MoveGalvonometer:
                     byteMessage = new byte[4] { 0x04, 0x08, 0x00, 0x00 };
-                    fullMessage = getFullMessage(byteMessage, paramBytes);
-                    checksum = HelperFunctions.ParseCmdPacket(fullMessage);
-                    byteMessage[2] = checksum[0];
-                    byteMessage[3] = checksum[1];
-                    printer.WriteSerialToFirmware(byteMessage, 4);
-                    handleResponse(cmd, byteMessage, paramBytes, param);
                     // send commandwith param[0] x and param[1] y
                     break;
                 case Command.RemoveModelFromPrinter:
@@ -88,6 +59,7 @@ namespace PrinterSimulator
                     Console.WriteLine("Not a valid command");
                     break;
             }
+            handleMessage(cmd, byteMessage, paramBytes, param);
         }
 
         private byte[] getFullMessage(byte[] header, byte[] param)
@@ -110,47 +82,67 @@ namespace PrinterSimulator
             return paramReturn;
         }
 
-        private void handleResponse(Command cmd, byte[] byteMessage, byte[] byteParam, float[] floatParam)
+        private void handleMessage(Command cmd, byte[] byteMessage, byte[] paramBytes, float[] floatParam)
         {
-            var finalResponse = "";
-            var headerResponse = new byte[4];
-            read(headerResponse, 4);
-            bool isRight = byteMessage.SequenceEqual(headerResponse);
-            if (byteMessage.SequenceEqual(headerResponse))
+            var fullMessage = getFullMessage(byteMessage, paramBytes);
+            var checksum = HelperFunctions.ParseCmdPacket(fullMessage);
+            byteMessage[2] = checksum[0];
+            byteMessage[3] = checksum[1];
+            bool done = false;
+            while (!done)
             {
-                printer.WriteSerialToFirmware(new byte[1] { 0xA5 }, 1);
-                printer.WriteSerialToFirmware(byteParam, byteParam.Length);
-                var ch = new byte[1] { 0xFF};
-                while (!ch.SequenceEqual(new byte[1] { 0x00 }))
+                printer.WriteSerialToFirmware(byteMessage, byteMessage.Length);
+                var finalResponse = "";
+                var headerResponse = new byte[4];
+                if (!read(headerResponse, 4))
                 {
-                    read(ch, 1);
-                    finalResponse += System.Text.Encoding.UTF8.GetString(ch);
+                    continue;
                 }
-                if (finalResponse.Split(':')[0] == "VERSION")
+                bool isRight = byteMessage.SequenceEqual(headerResponse);
+                if (isRight)
                 {
-                    this.firmwareVersion = "FIRMWARE VERSION: " + finalResponse.Split(':')[1].Replace("\0", string.Empty);
+                    printer.WriteSerialToFirmware(new byte[1] { 0xA5 }, 1);
+                    printer.WriteSerialToFirmware(paramBytes, paramBytes.Length);
+                    var ch = new byte[1] { 0xFF };
+                    while (!ch.SequenceEqual(new byte[1] { 0x00 }))
+                    {
+                        var readResult = read(ch, 1);
+                        if (!readResult)
+                        {
+                            ch[0] = 0x00;
+                        }
+                        finalResponse += System.Text.Encoding.UTF8.GetString(ch);
+                    }
+                    if (finalResponse.Split(':')[0] == "VERSION")
+                    {
+                        this.firmwareVersion = "FIRMWARE VERSION: " + finalResponse.Split(':')[1].Replace("\0", string.Empty);
+                        done = true;
+                        return;
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
                 else
                 {
-                    execute(cmd, floatParam);
+                    printer.WriteSerialToFirmware(new byte[1] { 0xFF }, 1);
+                    continue;
                 }
-            }
-            else
-            {
-                printer.WriteSerialToFirmware(new byte[1] { 0xFF }, 1);
-                execute(cmd, floatParam);
             }
 
         }
         private bool read(byte[] buffer, int expectedBytes)
         {
-            int readResult = 0;
-            while (readResult == 0)
+            int timeout = 100;
+            while (printer.ReadSerialFromFirmware(buffer, expectedBytes) != expectedBytes && timeout > 0)
             {
-                readResult = printer.ReadSerialFromFirmware(buffer, expectedBytes);
-                if (readResult == 0)
+                System.Threading.Thread.Sleep(1);
+                timeout--;
+                if (timeout == 0)
                 {
-                    System.Threading.Thread.Sleep(10);
+                    System.Threading.Thread.Sleep(5);
+                    return false;
                 }
             }
             return true;

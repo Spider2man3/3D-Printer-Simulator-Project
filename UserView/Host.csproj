@@ -79,7 +79,6 @@
     <Compile Include="Helpers\GcodeParser.cs" />
     <Compile Include="Helpers\GCodeUtil.cs" />
     <Compile Include="Helpers\GenericGCodeParser.cs" />
-    <Compile Include="Helpers\HelperFunctions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
