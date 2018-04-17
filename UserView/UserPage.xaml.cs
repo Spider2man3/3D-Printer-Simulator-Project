@@ -1,5 +1,4 @@
-﻿using gs;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using PrinterSimulator;
 using System;
 using System.Collections.Generic;

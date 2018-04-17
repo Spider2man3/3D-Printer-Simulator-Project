@@ -20,6 +20,7 @@ namespace Host
             var lineCounter = -1;
             using (var sr = new StreamReader(file))
             {
+                Console.WriteLine("Start Parsing");
                 while (!sr.EndOfStream)
                 {
                     //List<string> GLine = new List<string>();
@@ -39,7 +40,7 @@ namespace Host
                         {
                             var xFloat = float.Parse(xString.First().Substring(1));
                             var yFloat = float.Parse(yString.First().Substring(1));
-                            handler.execute(Command.MoveGalvonometer, new float[] { xFloat, yFloat });
+                            handler.execute(Command.MoveGalvonometer, new float[] { xFloat * 0.025f, yFloat * 0.025f });
                         }
                         if (zString != null && zString.Length != 0)
                         {
@@ -63,6 +64,7 @@ namespace Host
                         handler.execute(Command.SetLaser, new float[] { 0f });
                     }
                 }
+                Console.WriteLine("End Parsing");
             }
         }
      

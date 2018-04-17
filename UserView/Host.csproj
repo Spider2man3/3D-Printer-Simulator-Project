@@ -74,11 +74,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\GCodeFile.cs" />
-    <Compile Include="Helpers\GCodeLine.cs" />
     <Compile Include="Helpers\GcodeParser.cs" />
-    <Compile Include="Helpers\GCodeUtil.cs" />
-    <Compile Include="Helpers\GenericGCodeParser.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
