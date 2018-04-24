@@ -37,8 +37,8 @@ namespace Host
 
                         if ((xString != null && xString.Length != 0) && (yString != null && yString.Length != 0))
                         {
-                            var xFloat = float.Parse(xString.First().Substring(1));
-                            var yFloat = float.Parse(yString.First().Substring(1));
+                            var xFloat = float.Parse(xString.First().Substring(1)) * 0.025f;
+                            var yFloat = float.Parse(yString.First().Substring(1)) * 0.025f;
                             handler.execute(Command.MoveGalvonometer, new float[] { xFloat, yFloat });
                         }
                         if (zString != null && zString.Length != 0)
