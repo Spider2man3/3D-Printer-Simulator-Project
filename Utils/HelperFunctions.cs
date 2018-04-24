@@ -25,7 +25,10 @@ namespace PrinterSimulator
         public static bool validateChecksum(byte[] header, byte[] parameters)
         {
             var checksum = new byte[2] { header[2], header[3] };
-            ushort checksumValue = (ushort)((ushort)(header[2] << 8) + header[3]);
+            ushort checksumValue = 0;
+            checksumValue = (ushort)(checksumValue | checksum[0]);
+            checksumValue = (ushort)(checksumValue << 8);
+            checksumValue = (ushort)(checksumValue | checksum[1]);
             ushort sum = 0;
             for (int i = 0; i < 2; i++)
             {

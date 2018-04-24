@@ -34,7 +34,7 @@ namespace Firmware
             {
                 return true;
             }
-            int timeout = 10000;
+            int timeout = 100;
             int readResult = 0;
             while (timeout > 0 && readResult == 0)
             {
@@ -42,11 +42,12 @@ namespace Firmware
                 if (readResult != expectedBytes)
                 {
                     timeout--;
-                    Thread.Sleep(10);
+                    Thread.Sleep(20);
                 }
             }
             if (timeout == 0)
             {
+                Console.WriteLine("Firmware: Read timeout");
                 var message = Encoding.UTF8.GetBytes("TIMEOUT" + char.MinValue);
                 printer.WriteSerialToHost(message, message.Length);
                 return false;
@@ -59,11 +60,13 @@ namespace Firmware
             while (!fDone)
             {
                 var header = new byte[4];
-                if (printer.ReadSerialFromHost(header, 4) == 0)
+                if (printer.ReadSerialFromHost(header, 4) != 4)
                 {
                     Thread.Sleep(5);
                     continue; // skip rest of loop 
                 }
+                Console.WriteLine("Firmware: Receieved command from host");
+                Console.WriteLine("Firmware: Sending header back to host");
                 printer.WriteSerialToHost(header, 4);
                 var ackOrNak = new byte[1];
                 if (!read(ackOrNak, 1))
@@ -72,14 +75,18 @@ namespace Firmware
                 }
                 if (ackOrNak.SequenceEqual(new byte[1] { 0xA5 }))
                 {
+                    Console.WriteLine("Firmware: Received ack");
                     bool checksum = true;
                     var paramSize = int.Parse(header[1].ToString());
                     var paramBytes = new byte[paramSize];
+                    Console.WriteLine("Firmware: Reading parameter data");
                     if (read(paramBytes, paramSize))
                     {
+                        Console.WriteLine("Firmware: Validating checksum");
                         checksum = HelperFunctions.validateChecksum(header, paramBytes);
                         if (checksum == true)
                         {
+                            Console.WriteLine("Firmware: Checksum was good, sending version confirmation");
                             // Run command header[0]
                             executeCommand(header[0], paramBytes);
                             var message = Encoding.UTF8.GetBytes("VERSION:" + firmwareVersion + char.MinValue);
@@ -87,13 +94,17 @@ namespace Firmware
                         }
                         else
                         {
+                            Console.WriteLine("Firmware: Checksum was bad, sending checksum error");
                             var message = Encoding.UTF8.GetBytes("CHECKSUM" + char.MinValue);
                             printer.WriteSerialToHost(message, message.Length);
                         }
                     }
                 }
                 else
+                {
+                    Console.WriteLine("Firmware: Received nak");
                     continue;
+                }
             }
         }
 

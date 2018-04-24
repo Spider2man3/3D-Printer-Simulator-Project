@@ -91,9 +91,22 @@ namespace PrinterSimulator
             bool done = false;
             while (!done)
             {
+                if (byteMessage[1] > 0x08)
+                {
+                    var breakp = 0;
+                }
+                Console.WriteLine("Host: Writing command {0} to firmware", cmd);
+                Console.Write("Host: Params in command: ");
+                foreach (float p in floatParam)
+                {
+                    Console.Write("{0}, ", p);
+                }
+                Console.Write("\n");
+                Console.WriteLine("Host: Checksum verification returned {0}", HelperFunctions.validateChecksum(byteMessage, paramBytes));
                 printer.WriteSerialToFirmware(byteMessage, byteMessage.Length);
                 var finalResponse = "";
                 var headerResponse = new byte[4];
+                Console.WriteLine("Host: Reading header back from firmware");
                 if (!read(headerResponse, 4))
                 {
                     continue;
@@ -101,9 +114,11 @@ namespace PrinterSimulator
                 bool isRight = byteMessage.SequenceEqual(headerResponse);
                 if (isRight)
                 {
+                    Console.WriteLine("Host: Header was correct, sending parameter data");
                     printer.WriteSerialToFirmware(new byte[1] { 0xA5 }, 1);
                     printer.WriteSerialToFirmware(paramBytes, paramBytes.Length);
                     var ch = new byte[1] { 0xFF };
+                    Console.WriteLine("Host: Waiting for success string");
                     while (!ch.SequenceEqual(new byte[1] { 0x00 }))
                     {
                         var readResult = read(ch, 1);
@@ -115,17 +130,20 @@ namespace PrinterSimulator
                     }
                     if (finalResponse.Split(':')[0] == "VERSION")
                     {
+                        Console.WriteLine("Host: received version confirmation\n");
                         this.firmwareVersion = "FIRMWARE VERSION: " + finalResponse.Split(':')[1].Replace("\0", string.Empty);
                         done = true;
                         return;
                     }
                     else
                     {
+                        Console.WriteLine("Host: Did not receive version confirmation\n");
                         continue;
                     }
                 }
                 else
                 {
+                    Console.WriteLine("Host: Header was wrong, resending command\n");
                     printer.WriteSerialToFirmware(new byte[1] { 0xFF }, 1);
                     continue;
                 }
@@ -137,10 +155,11 @@ namespace PrinterSimulator
             int timeout = 100;
             while (printer.ReadSerialFromFirmware(buffer, expectedBytes) != expectedBytes && timeout > 0)
             {
-                System.Threading.Thread.Sleep(1);
+                System.Threading.Thread.Sleep(20);
                 timeout--;
                 if (timeout == 0)
                 {
+                    Console.WriteLine("Host: Read timeout");
                     System.Threading.Thread.Sleep(5);
                     return false;
                 }
