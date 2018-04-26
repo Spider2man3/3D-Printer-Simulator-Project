@@ -29,37 +29,44 @@ namespace PrinterSimulator
         }
         public void execute(Command cmd, float[] param)
         {
-            var paramBytes = getParamAsBytes(param);
-            var byteMessage = new byte[4];
-            switch (cmd)
+            try
             {
-                case Command.GetFirmwareVersion:
-                    byteMessage = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
-                    break;
-                case Command.ResetStepper:
-                    byteMessage = new byte[4] { 0x01, 0x00, 0x00, 0x00 };
-                    break;
-                case Command.StepStepper:
-                    byteMessage = new byte[4] { 0x02, 0x04, 0x00, 0x00 };
-                    // send command with param[0] (up or down)
-                    break;
-                case Command.SetLaser:
-                    byteMessage = new byte[4] { 0x03, 0x04, 0x00, 0x00 };
-                    // send command param[0] (on or off)
-                    break;
-                case Command.MoveGalvonometer:
-                    byteMessage = new byte[4] { 0x04, 0x08, 0x00, 0x00 };
-                    // send commandwith param[0] x and param[1] y
-                    break;
-                case Command.RemoveModelFromPrinter:
-                    break;
-                case Command.WaitMicroseconds:
-                    break;
-                default:
-                    Console.WriteLine("Not a valid command");
-                    break;
+                var paramBytes = getParamAsBytes(param);
+                var byteMessage = new byte[4];
+                switch (cmd)
+                {
+                    case Command.GetFirmwareVersion:
+                        byteMessage = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
+                        break;
+                    case Command.ResetStepper:
+                        byteMessage = new byte[4] { 0x01, 0x00, 0x00, 0x00 };
+                        break;
+                    case Command.StepStepper:
+                        byteMessage = new byte[4] { 0x02, 0x04, 0x00, 0x00 };
+                        // send command with param[0] (up or down)
+                        break;
+                    case Command.SetLaser:
+                        byteMessage = new byte[4] { 0x03, 0x04, 0x00, 0x00 };
+                        // send command param[0] (on or off)
+                        break;
+                    case Command.MoveGalvonometer:
+                        byteMessage = new byte[4] { 0x04, 0x08, 0x00, 0x00 };
+                        // send commandwith param[0] x and param[1] y
+                        break;
+                    case Command.RemoveModelFromPrinter:
+                        break;
+                    case Command.WaitMicroseconds:
+                        break;
+                    default:
+                        Console.WriteLine("Not a valid command");
+                        break;
+                }
+                handleMessage(cmd, byteMessage, paramBytes, param);
             }
-            handleMessage(cmd, byteMessage, paramBytes, param);
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.StackTrace);
+            }
         }
 
         private byte[] getFullMessage(byte[] header, byte[] param)
@@ -75,6 +82,7 @@ namespace PrinterSimulator
             }
             return fullMessage;
         }
+
         private byte[] getParamAsBytes(float[] param)
         {
             byte[] paramReturn = new byte[param.Length * 4];
@@ -130,7 +138,6 @@ namespace PrinterSimulator
                     continue;
                 }
             }
-
         }
         private bool read(byte[] buffer, int expectedBytes)
         {

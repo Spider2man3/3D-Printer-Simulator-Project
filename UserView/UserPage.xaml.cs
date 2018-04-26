@@ -40,15 +40,21 @@ namespace Host
         }
         private void Browse_Files(object sender, RoutedEventArgs e)
         {
+            try {
             OpenFileDialog filedialog = new OpenFileDialog();
             filedialog.Title = "Select GCode file";
             filedialog.Multiselect = false;
-           // var gcodeParser = new GcodeParser();
+            // var gcodeParser = new GcodeParser();
             if (filedialog.ShowDialog() == true)
             {
                 this.file = filedialog.OpenFile();
-                //TextReader tr = new StreamReader(this.file);
-                //gcodeParser.Parse(tr);
+                    //TextReader tr = new StreamReader(this.file);
+                    //gcodeParser.Parse(tr);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.StackTrace);
             }
         }
 
@@ -60,13 +66,20 @@ namespace Host
 
         private void Run(object sender, RoutedEventArgs e)
         {
-            var gcodeParser = new GcodeParser();
+            try
+            {
+                var gcodeParser = new GcodeParser();
 
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    handler.execute(Command.ResetStepper, new float[0]);
-            //}
-            gcodeParser.ParseGcode(this.file, handler);
+                //for (int i = 0; i < 100; i++)
+                //{
+                //    handler.execute(Command.ResetStepper, new float[0]);
+                //}
+                gcodeParser.ParseGcode(this.file, handler);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.StackTrace);
+            }
         }
     }
 }

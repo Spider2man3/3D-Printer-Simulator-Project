@@ -23,13 +23,20 @@ namespace Host
     {
         public MainWindow(HostHandler handler)
         {
-            InitializeComponent();
-            handler.execute(Command.GetFirmwareVersion, new float[0]);
-            var testPage = new TesterPage(this, handler);
-            var userPage = new UserPage(this, handler);
-            testPage.SetUserPage(userPage);
-            userPage.setTesterPage(testPage);
-            MainView.Child = userPage;
+            try
+            {
+                InitializeComponent();
+                handler.execute(Command.GetFirmwareVersion, new float[0]);
+                var testPage = new TesterPage(this, handler);
+                var userPage = new UserPage(this, handler);
+                testPage.SetUserPage(userPage);
+                userPage.setTesterPage(testPage);
+                MainView.Child = userPage;
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.StackTrace);
+            }
         }
     }
 }
