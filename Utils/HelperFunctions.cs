@@ -16,7 +16,7 @@ namespace PrinterSimulator
                 byteSum += cmdPacket[i];
             }
             //ushort checkSum = (ushort)((12 * byteSum) / 16);
-            byte[] checksumBytes = new byte[] { 0, 0 }; 
+            byte[] checksumBytes = new byte[] { 0, 0 };
             checksumBytes[0] = (byte)(byteSum >> 8);
             checksumBytes[1] = (byte)(byteSum & 0xff);
 

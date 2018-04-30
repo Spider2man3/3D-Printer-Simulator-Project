@@ -65,29 +65,36 @@ namespace Host
 
         private void Move_Galvonometer(object sender, RoutedEventArgs e)
         {
-            float x = float.Parse(this.XGalvo.Text);
-            float y = float.Parse(this.YGalvo.Text);
-            if (x > 2.5)
+            try
             {
-                x = 2.5f;
-                this.XGalvo.Text = x.ToString();
+                float x = float.Parse(this.XGalvo.Text);
+                float y = float.Parse(this.YGalvo.Text);
+                if (x > 2.5)
+                {
+                    x = 2.5f;
+                    this.XGalvo.Text = x.ToString();
+                }
+                else if (x < -2.5)
+                {
+                    x = -2.5f;
+                    this.XGalvo.Text = x.ToString();
+                }
+                if (y > 2.5)
+                {
+                    y = 2.5f;
+                    this.YGalvo.Text = y.ToString();
+                }
+                else if (y < -2.5)
+                {
+                    y = -2.5f;
+                    this.YGalvo.Text = y.ToString();
+                }
+                handler.execute(Command.MoveGalvonometer, new float[2] { x, y });
             }
-            else if (x < -2.5)
+            catch (Exception ex)
             {
-                x = -2.5f;
-                this.XGalvo.Text = x.ToString();
+                System.Console.WriteLine(ex.StackTrace);
             }
-            if (y > 2.5)
-            {
-                y = 2.5f;
-                this.YGalvo.Text = y.ToString();
-            }
-            else if (y < -2.5)
-            {
-                y = -2.5f;
-                this.YGalvo.Text = y.ToString();
-            }
-            handler.execute(Command.MoveGalvonometer, new float[2] { x, y });
         }
     }
 }
