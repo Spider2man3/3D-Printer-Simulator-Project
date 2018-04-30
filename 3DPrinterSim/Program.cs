@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Hardware;
 using Firmware;
-using UserView;
+using Host;
 using System.Windows;
 
 namespace PrinterSimulator
@@ -62,21 +62,19 @@ namespace PrinterSimulator
             Thread oThread = new Thread(new ThreadStart(printer.Run));
             oThread.Start();
             printer.WaitForInit();
-            //------------------
 
             // Start the firmware thread - DO NOT CHANGE THESE LINES
             FirmwareController firmware = new FirmwareController(printer.GetPrinterSim());
             oThread = new Thread(new ThreadStart(firmware.Start));
             oThread.Start();
             firmware.WaitForInit();
-            //------------------
+            HostHandler handler = new HostHandler(printer);
 
             //SetForegroundWindow(ptr);
             // Hide Console
             //ShowWindow(ptr, 0);
-
             Application app = new Application();
-            app.Run(new MainWindow());
+            app.Run(new MainWindow(handler));
 
             printer.Stop();
             firmware.Stop();

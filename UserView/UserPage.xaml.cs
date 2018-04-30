@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using PrinterSimulator;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace UserView
+namespace Host
 {
     /// <summary>
     /// Interaction logic for UserPage.xaml
@@ -24,23 +25,30 @@ namespace UserView
     {
         private MainWindow mainWindow;
         private TesterPage testerPage;
-        public UserPage(MainWindow mainWindow)
+        private HostHandler handler;
+        private Stream file;
+        public UserPage(MainWindow mainWindow, HostHandler handler)
         {
             InitializeComponent();
+            this.handler = handler;
             this.mainWindow = mainWindow;
+            this.UFirmwareVersion.Content = handler.firmwareVersion;
         }
         public void setTesterPage(TesterPage page)
         {
             this.testerPage = page;
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Browse_Files(object sender, RoutedEventArgs e)
         {
             OpenFileDialog filedialog = new OpenFileDialog();
             filedialog.Title = "Select GCode file";
             filedialog.Multiselect = false;
+           // var gcodeParser = new GcodeParser();
             if (filedialog.ShowDialog() == true)
             {
-                Stream fileStream = filedialog.OpenFile();
+                this.file = filedialog.OpenFile();
+                //TextReader tr = new StreamReader(this.file);
+                //gcodeParser.Parse(tr);
             }
         }
 
@@ -48,6 +56,17 @@ namespace UserView
         {
             (this.Parent as Viewbox).Child = testerPage;
             //(this.Parent as Frame).Content = testerPage;
+        }
+
+        private void Run(object sender, RoutedEventArgs e)
+        {
+            var gcodeParser = new GcodeParser();
+
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    handler.execute(Command.ResetStepper, new float[0]);
+            //}
+            gcodeParser.ParseGcode(this.file, handler);
         }
     }
 }
