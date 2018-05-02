@@ -45,6 +45,10 @@ namespace Host
                         if (zString != null && zString.Length != 0)
                         {
                             var newZ = float.Parse(zString.First().Substring(1));
+                            if (newZ == 24.000)
+                            {
+                                Console.WriteLine("The z is correct");
+                            }
                             handler.execute(Command.moveStepper, new float[] { (float)(newZ - currentZ) });
                             currentZ = newZ;
                             //handler.execute(Command.StepStepper, new float[] { 1f });
@@ -65,6 +69,10 @@ namespace Host
                     else if (line.IndexOf(g92, StringComparison.CurrentCultureIgnoreCase) >= 0)
                     {
                         handler.execute(Command.SetLaser, new float[] { 0f });
+                    }
+                    else if(line.IndexOf("M84",StringComparison.CurrentCultureIgnoreCase) >= 0)
+                    {
+                        break;
                     }
                 }
             }
