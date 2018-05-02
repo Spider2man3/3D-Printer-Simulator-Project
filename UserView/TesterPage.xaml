@@ -10,15 +10,7 @@
     <Button Click="Toggle_Laser" Content="Toggle laser" Canvas.Left="520" Canvas.Top="10" Height="86" Width="144"></Button>
     <Button Click="Switch_To_User" Height="38" Width="96" Canvas.Left="694" Canvas.Top="10">User Mode</Button>
     <Button Click="Reset_Stepper" Content="Reset Stepper" Height="50" Width="100" Canvas.Left="10" Canvas.Top="10"/>
-    <Grid Canvas.Left="115" Canvas.Top="60" Height="48" Width="100">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Button Click="Step_Stepper_Up" FontFamily="Marlett" FontSize="50" Content="5" Padding="-10" Margin="5" Grid.Column="0"/>
-        <Button Click="Step_Stepper_Down" FontFamily="Marlett" FontSize="50" Content="6" Padding="-10" Margin="5" Grid.Column="1"/>
-    </Grid>
-    <Button  Content="Step Stepper" Height="50" Width="100" Canvas.Left="115" Canvas.Top="10"/>
+    <Button  Click="Move_Stepper" Content="Move Stepper" Height="50" Width="100" Canvas.Left="115" Canvas.Top="10"/>
     <Button  Click ="Move_Galvonometer" Content="Move Galvonometer" Height="86" Width="160" Canvas.Left="220" Canvas.Top="10"/>
     <StackPanel Orientation="Horizontal" Height="48" Canvas.Top="154" Canvas.Left="220" Width="160">
         <TextBox x:Name="XGalvo" Height="46"  Width="78" Margin="1" FontSize="30"/>
@@ -28,4 +20,5 @@
     <TextBlock Padding="0" Background="WhiteSmoke" FontSize ="30" Height="48" Width="160" Canvas.Left="220" Canvas.Top="102" Text="    X       Y"/>
     <TextBlock x:Name="Console" Background="WhiteSmoke" Width="319" Canvas.Left="471" Canvas.Top="301" Height="139"></TextBlock>
     <Label x:Name="TFirmwareVersion" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Background="WhiteSmoke" Width="141" Canvas.Left="10" Canvas.Top="403" Height="37"/>
+    <TextBox x:Name="Stepper_Move_Distance" Height="46"  Width="100" FontSize="30" Canvas.Left="115" Canvas.Top="65"/>
 </Canvas>

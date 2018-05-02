@@ -67,6 +67,7 @@ namespace Host
             //    handler.execute(Command.ResetStepper, new float[0]);
             //}
             gcodeParser.ParseGcode(this.file, handler);
+            this.Console.Text = "File done";
         }
     }
 }

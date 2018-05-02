@@ -14,10 +14,11 @@ namespace Host
         public void ParseGcode(Stream file, HostHandler handler)
         {
             //List<List<string>> listOfG = new List<List<string>>();
-
+            double currentZ = 0;
             var g1 = "G1";
             var g92 = "G92";
             var lineCounter = -1;
+            handler.execute(Command.ResetStepper, new float[] { });
             using (var sr = new StreamReader(file))
             {
                 while (!sr.EndOfStream)
@@ -37,13 +38,16 @@ namespace Host
 
                         if ((xString != null && xString.Length != 0) && (yString != null && yString.Length != 0))
                         {
-                            var xFloat = float.Parse(xString.First().Substring(1)) * 0.025f;
-                            var yFloat = float.Parse(yString.First().Substring(1)) * 0.025f;
+                            var xFloat = float.Parse(xString.First().Substring(1)) * 0.0125f;
+                            var yFloat = float.Parse(yString.First().Substring(1)) * 0.0125f;
                             handler.execute(Command.MoveGalvonometer, new float[] { xFloat, yFloat });
                         }
                         if (zString != null && zString.Length != 0)
                         {
-                            handler.execute(Command.StepStepper, new float[] { 1f });
+                            var newZ = float.Parse(zString.First().Substring(1));
+                            handler.execute(Command.moveStepper, new float[] { (float)(newZ - currentZ) });
+                            currentZ = newZ;
+                            //handler.execute(Command.StepStepper, new float[] { 1f });
                         }
                         if (eString != null && eString.Length != 0)
                         {

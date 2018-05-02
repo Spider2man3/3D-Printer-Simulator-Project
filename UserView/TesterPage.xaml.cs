@@ -89,5 +89,11 @@ namespace Host
             }
             handler.execute(Command.MoveGalvonometer, new float[2] { x, y });
         }
+
+        private void Move_Stepper(object sender, RoutedEventArgs e)
+        {
+            var distance = float.Parse(this.Stepper_Move_Distance.Text);
+            handler.execute(Command.moveStepper, new float[1] { distance});
+        }
     }
 }
