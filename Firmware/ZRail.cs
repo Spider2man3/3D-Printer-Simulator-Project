@@ -63,7 +63,7 @@ namespace Firmware
                 currentWait += currentMicrosecondWait;
                 if (currentWait > 1000 && currentMicrosecondWait > 69)
                 {
-                    currentMicrosecondWait -= .050;
+                    currentMicrosecondWait -= .049;
                     currentWait = 0;
                 }
             }
@@ -91,7 +91,7 @@ namespace Firmware
                     currentWait += currentMicrosecondWait;
                     if (currentWait > 1000 && currentMicrosecondWait > 69)
                     {
-                        currentMicrosecondWait -= .050;
+                        currentMicrosecondWait -= .049;
                         currentWait = 0;
                     }
                 }
