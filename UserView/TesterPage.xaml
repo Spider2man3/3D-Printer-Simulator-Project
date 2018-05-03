@@ -7,7 +7,7 @@
       mc:Ignorable="d"
       VerticalAlignment="Top"
       HorizontalAlignment="Left" Height="450" Width="800">
-    <Button Click="Toggle_Laser" Content="Toggle laser" Canvas.Left="520" Canvas.Top="10" Height="86" Width="144"></Button>
+    <Button Click="Toggle_Laser" Content="Toggle laser" Canvas.Left="385" Canvas.Top="10" Height="86" Width="144"></Button>
     <Button Click="Switch_To_User" Height="38" Width="96" Canvas.Left="694" Canvas.Top="10">User Mode</Button>
     <Button Click="Reset_Stepper" Content="Reset Stepper" Height="50" Width="100" Canvas.Left="10" Canvas.Top="10"/>
     <Button  Click="Move_Stepper" Content="Move Stepper" Height="50" Width="100" Canvas.Left="115" Canvas.Top="10"/>
@@ -16,7 +16,6 @@
         <TextBox x:Name="XGalvo" Height="46"  Width="78" Margin="1" FontSize="30"/>
         <TextBox x:Name="YGalvo" Height="46"  Width="78" Margin="1" FontSize="30"/>
     </StackPanel>
-    <Label Content="Limit Switch Pressed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="WhiteSmoke" Canvas.Left="385" Canvas.Top="10" Height="54" Width="130" RenderTransformOrigin="0.858,-2"></Label>
     <TextBlock Padding="0" Background="WhiteSmoke" FontSize ="30" Height="48" Width="160" Canvas.Left="220" Canvas.Top="102" Text="    X       Y"/>
     <TextBlock x:Name="Console" Background="WhiteSmoke" Width="319" Canvas.Left="471" Canvas.Top="301" Height="139"></TextBlock>
     <Label x:Name="TFirmwareVersion" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" Background="WhiteSmoke" Width="141" Canvas.Left="10" Canvas.Top="403" Height="37"/>

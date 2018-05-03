@@ -11,6 +11,7 @@ namespace Firmware
     {
         private PrinterControl printer;
         private double plateHeight = 0;
+        List<Tuple<double, double>> moves = new List<Tuple<double, double>>();
         public ZRail(PrinterControl printer)
         {
             this.printer = printer;
@@ -69,11 +70,12 @@ namespace Firmware
             Console.WriteLine("Limit switch pressed?");
         }
 
-        public void moveStepper(float distance)
+        public void moveStepper(float newZ)
         {
             double currentMicrosecondWait = 635;
             double currentWait = 0;
-            int distanceLeft = (int)Math.Round(400 * distance);
+            moves.Add(new Tuple<double, double>(plateHeight, newZ));
+            int distanceLeft = (int)Math.Round(400 * (newZ - plateHeight));
             if (distanceLeft > 0)
             {
                 while (distanceLeft > 0 && plateHeight < 100)

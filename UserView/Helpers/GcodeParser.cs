@@ -14,7 +14,6 @@ namespace Host
         public void ParseGcode(Stream file, HostHandler handler)
         {
             //List<List<string>> listOfG = new List<List<string>>();
-            double currentZ = 0;
             var g1 = "G1";
             var g92 = "G92";
             var lineCounter = -1;
@@ -45,8 +44,7 @@ namespace Host
                         if (zString != null && zString.Length != 0)
                         {
                             var newZ = float.Parse(zString.First().Substring(1));
-                            handler.execute(Command.moveStepper, new float[] { (float)(newZ - currentZ) });
-                            currentZ = newZ;
+                            handler.execute(Command.moveStepper, new float[] { (float)(newZ) });
                             //handler.execute(Command.StepStepper, new float[] { 1f });
                         }
                         if (eString != null && eString.Length != 0)
